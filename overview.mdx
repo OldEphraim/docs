@@ -1,0 +1,51 @@
+**Vers** enables you to create branching virtual machines that capture both filesystem and memory state, allowing you to explore multiple execution paths without starting over.
+
+## The Problem
+
+Traditional development and testing workflows force you to make irreversible decisions. When testing web applications, you might spend minutes navigating to a complex form, only to realize you need to test multiple scenarios from that same point. Usually, this means starting over from scratch every time.
+
+## The Solution
+
+Vers lets you **branch your virtual machine** at any point, creating parallel execution paths that inherit the exact state of their parent. Think of it like Git, but for entire running systems instead of just code.
+
+```bash
+# Navigate to your test scenario
+vers connect  # SSH into VM, run your setup
+
+# At a decision point, create branches
+vers branch --name success-path
+vers branch --name error-path  
+
+# Test both scenarios in parallel
+vers checkout success-path
+vers connect  # Test the success case
+
+vers checkout error-path  
+vers connect  # Test the error case
+```
+
+## Key Benefits
+
+**Time Savings**: Set up complex scenarios once, then branch to test multiple paths without repeating setup work.
+
+**True Parallelism**: Run multiple test scenarios simultaneously across different terminal sessions.
+
+**State Preservation**: Both filesystem changes and memory state are captured, so running processes continue exactly where they left off.
+
+**Familiar Interface**: Git-like commands (`branch`, `checkout`, `HEAD`) make the learning curve minimal.
+
+## Common Use Cases
+
+**Web Testing**: Navigate to a complex form, then branch to test different input combinations without re-navigation.
+
+**A/B Testing**: Fork your application state to compare different user flows side-by-side.
+
+**Debugging**: Create branches at suspected problem points to test different debugging approaches.
+
+**Development**: Experiment with risky changes while keeping a safe fallback state.
+
+## How It Works
+
+Vers manages clusters of virtual machines that can be branched like Git commits. When you branch a VM, the parent automatically pauses and the child inherits its complete state - both files and memory. This means running processes, network connections, and application state all transfer to the new branch.
+
+Ready to get started? Let's [install the CLI](installation) and explore the [core concepts](core-concepts).

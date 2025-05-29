@@ -1,0 +1,64 @@
+Get up and running with Vers in just a few steps.
+
+## Prerequisites
+
+- **Operating System**: Linux or macOS
+- **SSH Client**: Required for connecting to VMs (usually pre-installed)
+- **Terminal Access**: Command-line interface
+
+## Install the CLI
+
+### Option 1: Download Binary (Recommended)
+
+This option is under construction.
+
+### Option 2: Build from Source
+
+If you have Go installed:
+
+```bash
+git clone https://github.com/hdresearch/vers-cli
+cd vers-cli
+go build -o vers
+sudo mv vers /usr/local/bin/
+```
+
+## Verify Installation
+
+Check that Vers is properly installed:
+
+```bash
+vers --version
+```
+
+You should see version information displayed.
+
+## Authentication
+
+Before using Vers, you'll need to authenticate:
+
+```bash
+vers login
+```
+
+This will prompt you for your API credentials. If you don't have credentials yet, contact your administrator or sign up for access.
+
+<Info>
+The `vers login` command stores your authentication token securely on your local machine. You'll only need to login once per machine.
+</Info>
+
+## Next Steps
+
+With Vers installed and authenticated, you're ready to:
+
+1. Learn the [core concepts](core-concepts) 
+2. Create [your first project](tutorials/your-first-project)
+3. Explore [parallel web testing](tutorials/parallel-web-testing)
+
+## Troubleshooting
+
+**Command not found**: Make sure `/usr/local/bin` is in your `$PATH`. You can check with `echo $PATH`.
+
+**Permission denied**: Ensure you have execute permissions on the binary with `chmod +x vers`.
+
+**Authentication issues**: Double-check your credentials and network connectivity. Contact support if problems persist.

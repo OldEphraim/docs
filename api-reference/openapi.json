@@ -1,72 +1,858 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "chelsea_server",
+    "description": "",
     "license": {
-      "name": "MIT"
+      "name": ""
     },
-    "version": "1.0.0"
+    "version": "0.1.0"
   },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "paths": {
-    "/plants": {
+    "/api/cluster": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "tags": [],
+        "summary": "List all clusters.",
+        "operationId": "list_clusters",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "List all clusters",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_Vec_ClusterDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [],
+        "summary": "Create a new cluster.",
+        "operationId": "create_cluster",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusterCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Cluster created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_ClusterDTO"
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Invalid cluster configuration",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/cluster/{cluster_id}": {
+      "get": {
+        "tags": [],
+        "summary": "Retrieve information on a particular cluster.",
+        "operationId": "get_cluster",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "description": "Unique cluster identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get cluster status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_ClusterDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cluster not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [],
+        "summary": "Delete a cluster.",
+        "operationId": "delete_cluster",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "description": "Unique cluster identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_ClusterDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cluster not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/cluster/{cluster_id}/ssh_key": {
+      "get": {
+        "tags": [],
+        "summary": "Get the SSH private key for VM access",
+        "operationId": "cluster_ssh_key",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "description": "Unique cluster identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_String"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find requested cluster",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to read SSH key file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [],
+        "summary": "Get health of the API.",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
+      }
+    },
+    "/api/network": {
+      "get": {
+        "tags": [],
+        "summary": "Get network information",
+        "operationId": "network_info",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInfoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rootfs": {
+      "get": {
+        "tags": [],
+        "summary": "List all available rootfs names on the server.",
+        "operationId": "list_rootfs",
+        "responses": {
+          "200": {
+            "description": "List of all rootfs names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_ListRootfsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - API key does not have required permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/rootfs/{rootfs_id}": {
+      "put": {
+        "tags": [],
+        "summary": "Upload a rootfs tar archive to the server. The archive should contain the Dockerfile and all necessary dependencies.",
+        "operationId": "upload_rootfs",
+        "parameters": [
+          {
+            "name": "rootfs_id",
+            "in": "path",
+            "description": "Identifier for the rootfs to create or update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dockerfile",
+            "in": "query",
+            "description": "The path of the Dockerfile contained within the tar archive",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "Tar archive containing Dockerfile and all necessary dependencies",
+          "content": {
+            "application/x-tar": {}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rootfs updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_UploadResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Rootfs created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_UploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing Dockerfile or invalid format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - API key does not have access to update this rootfs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [],
+        "summary": "Delete an existing rootfs from the server.",
+        "operationId": "delete_rootfs",
+        "parameters": [
+          {
+            "name": "rootfs_id",
+            "in": "path",
+            "description": "Identifier for the rootfs to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rootfs deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_DeleteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - API key does not have access to this rootfs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rootfs not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/vm": {
+      "get": {
+        "tags": [],
+        "summary": "List all VMs.",
+        "operationId": "list_vms",
+        "responses": {
+          "200": {
+            "description": "List all VMs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_Vec_VmDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/vm/{vm_id}": {
+      "get": {
+        "tags": [],
+        "summary": "Retrieve information on a particular VM.",
+        "operationId": "get_vm",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get VM status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_VmDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VM not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [],
+        "summary": "Delete a VM.",
+        "operationId": "delete_vm",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recursive",
+            "in": "query",
+            "description": "Delete children recursively",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VM deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_VmDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VM not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [],
+        "summary": "Update VM state.",
+        "operationId": "update_vm_state",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/PatchVMRequest"
               }
             }
           },
@@ -74,144 +860,1024 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "VM state updated successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_VmDTO"
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Invalid state transition",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Unauthorized",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "string"
                 }
               }
             }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VM not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
               }
             }
           }
         },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/vm/{vm_id}/branch": {
+      "post": {
+        "tags": [],
+        "summary": "Branch a VM.",
+        "operationId": "branch_vm",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "VM branched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_VmDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VM not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/vm/{vm_id}/commit": {
+      "post": {
+        "tags": [],
+        "summary": "Commit a VM.",
+        "operationId": "commit_vm",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "VM committed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_VmDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VM not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
+      }
+    },
+    "/api/vm/{vm_id}/ssh_key": {
+      "get": {
+        "tags": [],
+        "summary": "Get the SSH private key for VM access",
+        "operationId": "vm_ssh_key",
+        "parameters": [
+          {
+            "name": "vm_id",
+            "in": "path",
+            "description": "Unique VM identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseSuccess_String"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find requested VM",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to read SSH key file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponseError_String"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "ClusterCreate": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "fs_size_cluster_mib": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "The amount of total space to allocate to the cluster",
+            "minimum": 0
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "fs_size_vm_mib": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "The size of the VM filesystem (if smaller than the base image + overhead, will cause an error)",
+            "minimum": 0
+          },
+          "kernel_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mem_size_mib": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          },
+          "rootfs_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vcpu_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
+      "ClusterDTO": {
+        "type": "object",
+        "required": [
+          "id",
+          "vm_count",
+          "vms"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The cluster's ID."
+          },
+          "root_vm_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The ID of the cluster's root VM."
+          },
+          "vm_count": {
+            "type": "integer",
+            "description": "How many VMs are currently running on this cluster.",
+            "minimum": 0
+          },
+          "vms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VmDTO"
+            },
+            "description": "The VMs that are children of the cluster, including the root VM."
+          }
+        }
+      },
+      "DeleteResponse": {
+        "type": "object",
+        "required": [
+          "rootfs_name"
+        ],
+        "properties": {
+          "rootfs_name": {
             "type": "string"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "DeleteVmParams": {
         "type": "object",
         "properties": {
-          "error": {
+          "recursive": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "InstanceState": {
+        "type": "string",
+        "enum": [
+          "Not started",
+          "Running",
+          "Paused"
+        ]
+      },
+      "ListRootfsResponse": {
+        "type": "object",
+        "required": [
+          "rootfs_names"
+        ],
+        "properties": {
+          "rootfs_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NetworkInfoDTO": {
+        "type": "object",
+        "required": [
+          "num_networks",
+          "num_networks_available",
+          "num_networks_in_use"
+        ],
+        "properties": {
+          "num_networks": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 0
           },
-          "message": {
+          "num_networks_available": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "num_networks_in_use": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          }
+        }
+      },
+      "PatchVMRequest": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/VMAction"
+          }
+        }
+      },
+      "ServiceResponseError_String": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "error"
+        ],
+        "properties": {
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error": {
+            "type": "string"
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_ClusterDTO": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "id",
+              "vm_count",
+              "vms"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The cluster's ID."
+              },
+              "root_vm_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The ID of the cluster's root VM."
+              },
+              "vm_count": {
+                "type": "integer",
+                "description": "How many VMs are currently running on this cluster.",
+                "minimum": 0
+              },
+              "vms": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/VmDTO"
+                },
+                "description": "The VMs that are children of the cluster, including the root VM."
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_DeleteResponse": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "rootfs_name"
+            ],
+            "properties": {
+              "rootfs_name": {
+                "type": "string"
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_ListRootfsResponse": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "rootfs_names"
+            ],
+            "properties": {
+              "rootfs_names": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_String": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_UploadResponse": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "rootfs_name"
+            ],
+            "properties": {
+              "rootfs_name": {
+                "type": "string"
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_Vec_ClusterDTO": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "vm_count",
+                "vms"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The cluster's ID."
+                },
+                "root_vm_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The ID of the cluster's root VM."
+                },
+                "vm_count": {
+                  "type": "integer",
+                  "description": "How many VMs are currently running on this cluster.",
+                  "minimum": 0
+                },
+                "vms": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VmDTO"
+                  },
+                  "description": "The VMs that are children of the cluster, including the root VM."
+                }
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_Vec_VmDTO": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "state",
+                "cluster_id",
+                "children",
+                "network_info",
+                "ip_address"
+              ],
+              "properties": {
+                "children": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "The IDs of direct children branched from this VM."
+                },
+                "cluster_id": {
+                  "type": "string",
+                  "description": "The VM's cluster ID"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The ID of the VM."
+                },
+                "ip_address": {
+                  "type": "string",
+                  "description": "The VM's local IP address on the VM subnet"
+                },
+                "network_info": {
+                  "$ref": "#/components/schemas/VmNetworkInfoDTO",
+                  "description": "The VM's network configuration"
+                },
+                "parent_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The parent VM's ID, if present. If None, then this VM is a root VM."
+                },
+                "state": {
+                  "$ref": "#/components/schemas/InstanceState",
+                  "description": "Whether the VM is running, paused, or not started."
+                }
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceResponseSuccess_VmDTO": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "time_start",
+          "duration_ns",
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "id",
+              "state",
+              "cluster_id",
+              "children",
+              "network_info",
+              "ip_address"
+            ],
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "The IDs of direct children branched from this VM."
+              },
+              "cluster_id": {
+                "type": "string",
+                "description": "The VM's cluster ID"
+              },
+              "id": {
+                "type": "string",
+                "description": "The ID of the VM."
+              },
+              "ip_address": {
+                "type": "string",
+                "description": "The VM's local IP address on the VM subnet"
+              },
+              "network_info": {
+                "$ref": "#/components/schemas/VmNetworkInfoDTO",
+                "description": "The VM's network configuration"
+              },
+              "parent_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The parent VM's ID, if present. If None, then this VM is a root VM."
+              },
+              "state": {
+                "$ref": "#/components/schemas/InstanceState",
+                "description": "Whether the VM is running, paused, or not started."
+              }
+            }
+          },
+          "duration_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "time_start": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix epoch time (secs)",
+            "minimum": 0
+          }
+        }
+      },
+      "UploadResponse": {
+        "type": "object",
+        "required": [
+          "rootfs_name"
+        ],
+        "properties": {
+          "rootfs_name": {
+            "type": "string"
+          }
+        }
+      },
+      "UploadRootfsQuery": {
+        "type": "object",
+        "properties": {
+          "dockerfile": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "VMAction": {
+        "type": "string",
+        "enum": [
+          "pause",
+          "resume"
+        ]
+      },
+      "VmDTO": {
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "cluster_id",
+          "children",
+          "network_info",
+          "ip_address"
+        ],
+        "properties": {
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The IDs of direct children branched from this VM."
+          },
+          "cluster_id": {
+            "type": "string",
+            "description": "The VM's cluster ID"
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the VM."
+          },
+          "ip_address": {
+            "type": "string",
+            "description": "The VM's local IP address on the VM subnet"
+          },
+          "network_info": {
+            "$ref": "#/components/schemas/VmNetworkInfoDTO",
+            "description": "The VM's network configuration"
+          },
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The parent VM's ID, if present. If None, then this VM is a root VM."
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstanceState",
+            "description": "Whether the VM is running, paused, or not started."
+          }
+        }
+      },
+      "VmNetworkInfoDTO": {
+        "type": "object",
+        "required": [
+          "tap0_ip",
+          "tap0_name",
+          "guest_mac",
+          "guest_ip",
+          "vm_namespace",
+          "ssh_port"
+        ],
+        "properties": {
+          "guest_ip": {
+            "type": "string"
+          },
+          "guest_mac": {
+            "type": "string"
+          },
+          "ssh_port": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "tap0_ip": {
+            "type": "string"
+          },
+          "tap0_name": {
+            "type": "string"
+          },
+          "vm_namespace": {
             "type": "string"
           }
         }
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
+      "bearer_auth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "description": "Bearer token in Authorization header"
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearer_auth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "cluster",
+      "description": "Cluster management endpoints"
+    },
+    {
+      "name": "vm",
+      "description": "VM management endpoints"
+    },
+    {
+      "name": "rootfs",
+      "description": "Rootfs upload and management endpoints"
+    }
+  ]
 }

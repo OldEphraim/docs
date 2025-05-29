@@ -1,0 +1,127 @@
+Understanding these key concepts will help you work effectively with Vers.
+
+## Projects
+
+A **project** is your working directory containing:
+- `vers.toml` - Configuration file defining VM specifications
+- `.vers/` - Directory storing branch references and metadata (similar to `.git/`)
+
+Create a new project with:
+```bash
+vers init my-project
+```
+
+## Clusters
+
+A **cluster** is your virtual machine environment. When you run `vers up`, Vers creates a cluster based on your `vers.toml` configuration, including:
+- Root filesystem (rootfs) 
+- Memory allocation
+- CPU configuration
+- Network setup
+
+```bash
+vers up  # Creates cluster + root VM
+```
+
+## Virtual Machines (VMs)
+
+VMs are the actual running environments where your work happens. Each VM has:
+- **Unique ID**: Auto-generated identifier (e.g., `vm-abc123`)
+- **State**: Running, Paused, or Not Started
+- **IP Address**: For network access
+- **SSH Access**: Connect via `vers connect`
+
+## Branches
+
+**Branches** are named pointers to specific VMs, similar to Git branches. They provide:
+- **Human-readable names** instead of VM IDs
+- **Current context** tracking via HEAD
+- **History management** through the reference system
+
+```bash
+vers branch --name feature-test    # Create new branch
+vers checkout feature-test         # Switch to branch
+vers checkout -c another-branch    # Create and switch
+```
+
+## HEAD
+
+**HEAD** represents your current working context - which branch (and therefore which VM) you're currently "on". 
+
+HEAD can point to:
+- **A branch reference**: `ref: refs/heads/main` (normal state)
+- **A VM directly**: `vm-abc123` (detached HEAD state)
+
+Check your current HEAD:
+```bash
+vers checkout  # Lists branches, shows current with *
+```
+
+## State Inheritance
+
+When you create a branch, **complete state inheritance** occurs:
+1. **Parent VM pauses** automatically
+2. **Child VM inherits** both filesystem and memory state
+3. **Running processes continue** in the child exactly where they left off
+
+This means network connections, open files, and application state all transfer seamlessly.
+
+## Branch Relationships
+
+Vers maintains parent-child relationships between VMs:
+- **Parents can have multiple children** (multiple branches from one point)
+- **Each child has exactly one parent** (linear inheritance)
+- **Deleting requires no children** (`vers kill` only works on leaf nodes)
+
+## Working with Multiple Branches
+
+You can work in multiple branches simultaneously by using different terminal sessions:
+
+```bash
+# Terminal 1
+vers checkout branch-a
+vers connect
+
+# Terminal 2  
+vers checkout branch-b
+vers connect
+```
+
+Both VMs run in parallel, allowing true concurrent testing.
+
+## Configuration Files
+
+### vers.toml
+Your project configuration defining:
+```toml
+[machine]
+mem_size_mib = 512
+vcpu_count = 1
+fs_size_cluster_mib = 1024
+fs_size_vm_mib = 512
+
+[rootfs]
+name = "default"
+
+[kernel]
+name = "default.bin"
+```
+
+### .vers Directory Structure
+```
+.vers/
+├── HEAD              # Current branch pointer
+├── config            # Repository configuration  
+├── refs/
+│   └── heads/        # Branch references
+│       ├── main      # Points to VM ID
+│       └── feature   # Points to VM ID
+└── objects/          # Internal storage
+```
+
+## Next Steps
+
+Now that you understand the core concepts, you're ready to:
+- Create [your first project](tutorials/your-first-project)
+- Learn [branch management](tutorials/managing-branches) 
+- Explore [parallel testing workflows](tutorials/parallel-web-testing)
